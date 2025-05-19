@@ -1,9 +1,10 @@
 import React from 'react'
+import RegisterForm from './RegisterForm'
 
 export default function RegisterPage() {
   return (
-    <div>
-      RegisterPage
+    <div className='vertical-center flex items-center justify-center'>
+      <RegisterForm />
     </div>
   )
 }
