@@ -3,6 +3,7 @@
 import { Button, Card, CardBody, CardHeader, Input } from "@heroui/react";
 import { GiPadlock } from "react-icons/gi";
 import { useRouter } from "next/navigation";
+import { registerUser } from "@/app/actions/authActions";
 import {
   registerSchema,  
   RegisterSchema,
@@ -14,6 +15,7 @@ export default function RegisterForm() {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { isValid, errors, isSubmitting }
   } = useForm<RegisterSchema>({
     resolver: zodResolver(registerSchema),
@@ -24,10 +26,34 @@ export default function RegisterForm() {
 
   const onSubmit = async (data: RegisterSchema) => {
     console.log(data);
+
+    const result = await registerUser(data);
+
+    if (result.status === 'success') {
+      console.log("User registered successfully");
+    } else {
+      if (Array.isArray(result.error)) {
+        result.error.forEach((e: any) => {
+          console.log("e::: ", e);
+          const fieldName = e.path.join(".") as
+            | "email"
+            | "name"
+            | "password";
+          setError(fieldName, {
+            message: e.message
+          });
+        });
+      } else {
+        setError("root.serverError", {
+          message: result.error,
+        });
+      }
+    }
+
   }
 
   return (
-    <Card className="w-3/5 mx-auto">
+    <Card className="w-3/5 mx-auto max-w-3xl">
       <CardHeader className="flex flex-col items-center justify-center">
         <div className="flex flex-col gap-2 items-center text-default">
           <div className="flex flex-row items-center gap-3">

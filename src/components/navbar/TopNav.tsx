@@ -1,12 +1,15 @@
-'use client';
+import React from 'react';
+import Link from 'next/link';
+import { GiSelfLove } from 'react-icons/gi';
+import { auth } from '@/auth';
 
 import { Button, Navbar, NavbarBrand, NavbarContent } from '@heroui/react';
-import Link from 'next/link';
-import React from 'react';
-import { GiSelfLove } from 'react-icons/gi';
 import NavLink from './NavLink';
+import UserMenu from './UserMenu';
 
-export default function TopNav(){
+export default async function TopNav(){
+  const session = await auth();
+
   let role = "MEMBERS";
 
   const memberLinks = [
@@ -61,24 +64,28 @@ export default function TopNav(){
         </NavbarContent>
 
         <NavbarContent justify='end'>
-          <>
-            <Button
-              as={Link}
-              href='/login'
-              variant='bordered'
-              className='text-white'
-            >
-              Login
-            </Button>
-            <Button
-              as={Link}
-              href='/register'
-              variant='bordered'
-              className='text-white'
-            >
-              Register
-            </Button>
-          </>
+          {session?.user ? (
+            <UserMenu user={session.user} />
+          ) : (
+            <>
+              <Button
+                as={Link}
+                href='/login'
+                variant='bordered'
+                className='text-white'
+              >
+                Login
+              </Button>
+              <Button
+                as={Link}
+                href='/register'
+                variant='bordered'
+                className='text-white'
+              >
+                Register
+              </Button>
+            </>
+          )}
         </NavbarContent>
       </Navbar>
     </>

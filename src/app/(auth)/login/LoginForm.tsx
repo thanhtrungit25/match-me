@@ -3,6 +3,8 @@
 import { Button, Card, CardBody, CardHeader, Input } from "@heroui/react";
 import { GiPadlock } from "react-icons/gi";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import { signInUser } from "@/app/actions/authActions";
 import {
   loginSchema,  
   LoginSchema,
@@ -23,11 +25,18 @@ export default function LoginForm() {
   const router = useRouter();
 
   const onSubmit = async (data: LoginSchema) => {
-    console.log(data);
+    const result = await signInUser(data);
+    console.log("result::: ", result);
+    if (result.status === "success") {
+      router.push("/members");
+      router.refresh();
+    } else {
+      toast.error(result.error as string);
+    }
   }
 
   return (
-    <Card className="w-3/5 mx-auto">
+    <Card className="w-3/5 mx-auto max-w-3xl">
       <CardHeader className="flex flex-col items-center justify-center">
         <div className="flex flex-col gap-2 items-center text-default">
           <div className="flex flex-row items-center gap-3">
