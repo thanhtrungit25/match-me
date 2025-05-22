@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { GiSelfLove } from 'react-icons/gi';
 import { auth } from '@/auth';
+import { getUserInfoForNav } from '@/app/actions/userActions';
 
 import { Button, Navbar, NavbarBrand, NavbarContent } from '@heroui/react';
 import NavLink from './NavLink';
@@ -9,6 +10,8 @@ import UserMenu from './UserMenu';
 
 export default async function TopNav(){
   const session = await auth();
+  const userInfo =
+    session?.user && (await getUserInfoForNav());
 
   let role = "MEMBERS";
 
@@ -64,8 +67,8 @@ export default async function TopNav(){
         </NavbarContent>
 
         <NavbarContent justify='end'>
-          {session?.user ? (
-            <UserMenu user={session.user} />
+          {userInfo ? (
+            <UserMenu userInfo={userInfo} />
           ) : (
             <>
               <Button

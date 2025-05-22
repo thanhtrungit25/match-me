@@ -3,15 +3,17 @@
 import React from 'react';
 import Link from 'next/link';
 import { Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger } from '@heroui/react';
-import { Session } from 'next-auth';
 import { signOutUser } from '@/app/actions/authActions';
 
 type Props = {
-  user: Session["user"]
+  userInfo: {
+    image: string | null;
+    name: string | null;
+  } | null;
 }
 
 export default function UserMenu({
-  user
+  userInfo
 }: Props){
   return (
     <Dropdown>
@@ -21,9 +23,9 @@ export default function UserMenu({
           isBordered
           className="transition-transform"
           color="default"
-          name={user?.name || "user avatar"}
+          name={userInfo?.name || "user avatar"}
           size="sm"
-          src={user?.image || "/images/user.png"}
+          src={userInfo?.image || "/images/user.png"}
         />
       </DropdownTrigger>
       <DropdownMenu variant="flat" aria-label="User actions menu">
@@ -35,7 +37,7 @@ export default function UserMenu({
             className="h-14 flex flex-row"
             aria-label="username"
           >
-            Signed in as {user?.name}
+            Signed in as {userInfo?.name}
           </DropdownItem>
         </DropdownSection>
         <DropdownItem as={Link} href="/members/edit" key="edit">

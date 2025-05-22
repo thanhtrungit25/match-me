@@ -2,7 +2,6 @@
 
 import { Button, Card, CardBody, CardHeader, Input } from "@heroui/react";
 import { GiPadlock } from "react-icons/gi";
-import { useRouter } from "next/navigation";
 import { registerUser } from "@/app/actions/authActions";
 import {
   registerSchema,  
@@ -10,6 +9,7 @@ import {
 } from "@/lib/schemas/RegisterSchema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { handleFormServerErrors } from "@/lib/util";
 
 export default function RegisterForm() {
   const {
@@ -22,34 +22,14 @@ export default function RegisterForm() {
     mode: 'onTouched'
   });
 
-  const router = useRouter();
-
   const onSubmit = async (data: RegisterSchema) => {
-    console.log(data);
-
     const result = await registerUser(data);
 
     if (result.status === 'success') {
       console.log("User registered successfully");
     } else {
-      if (Array.isArray(result.error)) {
-        result.error.forEach((e: any) => {
-          console.log("e::: ", e);
-          const fieldName = e.path.join(".") as
-            | "email"
-            | "name"
-            | "password";
-          setError(fieldName, {
-            message: e.message
-          });
-        });
-      } else {
-        setError("root.serverError", {
-          message: result.error,
-        });
-      }
+      handleFormServerErrors(result, setError);
     }
-
   }
 
   return (
