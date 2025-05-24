@@ -1,9 +1,12 @@
 'use client';
 
-import { NavbarItem } from '@heroui/react';
+import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import React from 'react';
+
+import useMessageStore from '@/hooks/useMessageStore';
+
+import { NavbarItem } from '@heroui/react';
 
 type Props = {
   href: string;
@@ -15,6 +18,11 @@ export default function NavLink({
   label
 }: Props){
   const pathname = usePathname();
+  const { unreadCount } = useMessageStore(
+    (state) => ({
+      unreadCount: state.unreadCount
+    })
+  )
 
   return (
     <NavbarItem
@@ -23,6 +31,11 @@ export default function NavLink({
       isActive={pathname === href}
     >
       <span>{label}</span>
+      {href === "/messages" && (
+        <span className='ml-1'>
+          ({unreadCount})
+        </span>
+      )}
     </NavbarItem>
   );
 };
