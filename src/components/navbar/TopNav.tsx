@@ -7,6 +7,7 @@ import { getUserInfoForNav } from '@/app/actions/userActions';
 import { Button, Navbar, NavbarBrand, NavbarContent } from '@heroui/react';
 import NavLink from './NavLink';
 import UserMenu from './UserMenu';
+import FilterWrapper from './FilterWrapper';
 
 export default async function TopNav(){
   const session = await auth();
@@ -91,6 +92,7 @@ export default async function TopNav(){
           )}
         </NavbarContent>
       </Navbar>
+      <FilterWrapper />
     </>
   );
 };

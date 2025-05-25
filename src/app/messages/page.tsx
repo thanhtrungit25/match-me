@@ -11,7 +11,7 @@ export default async function MessagesPage({
   searchParams: { container: string }
 }) {
 
-  const messages = await getMessagesByContainer(
+  const { messages, nextCursor } = await getMessagesByContainer(
     searchParams.container
   )
 
@@ -21,7 +21,10 @@ export default async function MessagesPage({
         <MessageSidebar />
       </div>
       <div className="col-span-10">
-        <MessageTable initialMessages={messages} />
+        <MessageTable
+          initialMessages={messages}
+          nextCursor={nextCursor }
+        />
       </div>
     </div>
   )

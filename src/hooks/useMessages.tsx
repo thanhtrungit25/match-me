@@ -1,9 +1,10 @@
-import { Key, useCallback, useEffect, useState } from "react";
+import { Key, useCallback, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { MessageDto } from "@/types";
 
 import useMessageStore from "./useMessageStore";
-import { deleteMessage } from "@/app/actions/messageActions";
+
+import { deleteMessage, getMessagesByContainer } from "@/app/actions/messageActions";
 
 const outboxColumns = [
   { key: "recipientName", label: "Recipient" },
@@ -20,23 +21,31 @@ const inboxColumns = [
 ];
 
 export const useMessages = (
-  initialMessages: MessageDto[]
+  initialMessages: MessageDto[],
+  nextCursor?: string,
 ) => {
   const {
     set,
     remove,
     messages,
     updateUnreadCount,
+    resetMessages,
   } = useMessageStore((state) => ({
     set: state.set,
     remove: state.remove,
     messages: state.messages,
-    updateUnreadCount: state.updateUnreadCount
+    updateUnreadCount: state.updateUnreadCount,
+    resetMessages: state.resetMessages,
   }));
   const searchParams = useSearchParams();
   const router = useRouter();
-  const isOutbox =
-    searchParams.get("container") === "outbox";
+
+  const cursorRef = useRef(nextCursor);
+
+  const container = searchParams.get("container");
+  const isOutbox = container === "outbox";
+
+  const [loadingMore, setLoadingMore] = useState(false);
   
   const [isDeleting, setDeleting] = useState({
     id: "",
@@ -45,15 +54,31 @@ export const useMessages = (
 
   useEffect(() => {
     set(initialMessages);
+    cursorRef.current = nextCursor;
 
     return () => {
-      set([]);
+      resetMessages();
     }
-  }, [initialMessages, set]);
+  }, [initialMessages, set, nextCursor]);
 
   const columns = isOutbox
     ? outboxColumns
     : inboxColumns;
+
+  const loadMore = useCallback(async () => {
+    if (cursorRef.current) {
+      setLoadingMore(true);
+
+      const { messages, nextCursor } = await getMessagesByContainer(
+        container,
+        cursorRef.current
+      );
+
+      set(messages);
+      cursorRef.current = nextCursor;
+      setLoadingMore(false);
+    }
+  }, [container, set]);
 
   const handleDeleteMessage = useCallback(
     async (message: MessageDto) => {
@@ -88,5 +113,8 @@ export const useMessages = (
     selectRow: handleRowSelect,
     isDeleting,
     messages,
-  }
+    loadMore,
+    loadingMore,
+    hasMore: !!cursorRef.current,
+  };
 }
