@@ -27,4 +27,10 @@ npx prisma db push
 
 npx prisma studio
 # This command opens Prisma Studio, a web interface for browsing and editing your database content visually.
+
+npx prisma migrate reset --skip-seed
+# This command resets your database by rolling back all migrations and applying them again from scratch. The --skip-seed flag skips runnings any seed scripts.
+
+npx prisma db seed
+# This command runs your seed script, which adds initial data to your database after setting it up.
 ```
