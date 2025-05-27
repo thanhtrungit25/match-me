@@ -4,7 +4,7 @@ import { auth, signIn, signOut } from "@/auth";
 import { sendPasswordResetEmail, sendVerificationEmail } from "@/lib/mail";
 import { prisma } from "@/lib/prisma";
 import { LoginSchema } from "@/lib/schemas/LoginSchema";
-import { combinedRegisterSchema, RegisterSchema, registerSchema } from "@/lib/schemas/RegisterSchema";
+import { combinedRegisterSchema, profileSchema, ProfileSchema, RegisterSchema, registerSchema } from "@/lib/schemas/RegisterSchema";
 import { generateToken, getTokenByEmail, getTokenByToken } from "@/lib/tokens";
 import { ActionResult } from "@/types";
 import { TokenType, User } from "@prisma/client";
@@ -202,4 +202,51 @@ export async function resetPassword(token: string | null, password: string): Pro
     console.log(error);
     return { status: 'error', error: 'Something went wrong' }
   }
+}
+
+export async function completeSocialLoginProfile(data: ProfileSchema): Promise<ActionResult<string>> {
+  const session = await auth();
+
+  if (!session?.user) {
+    return { status: 'error', error: 'User not found' }
+  }
+
+  try {
+    const validated = profileSchema.safeParse(data);
+    if (!validated.success) {
+      return { status: 'error', error: validated.error.errors }
+    }
+
+    const user = await prisma.user.update({
+      where: { id: session.user.id },
+      data: {
+        profileComplete: true,
+        member: {
+          create: {
+            name: session.user.name as string,
+            image: session.user.image,
+            gender: validated.data.gender,
+            description: validated.data.description,
+            city: validated.data.city,
+            country: validated.data.country,
+            dateOfBirth: new Date(validated.data.dateOfBirth),
+          }
+        }
+      },
+      select: {
+        accounts: {
+          select: {
+            provider: true,
+          }
+        }
+      }
+    });
+    
+    return { status: 'success', data: user.accounts[0].provider }
+  } catch (error) {
+    console.log(error);
+    return { status: 'error', error: 'Something went wrong' }
+  }
+
+
 }

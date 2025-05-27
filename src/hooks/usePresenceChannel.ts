@@ -5,7 +5,7 @@ import { pusherClient } from "@/lib/pusher";
 import usePresenceStore from "./usePresenceStore";
 import { updateLastActive } from "@/app/actions/memberActions";
 
-export const usePresenceChannel = (userId: string | null) => {
+export const usePresenceChannel = (userId: string | null, profileComplete: boolean) => {
   const { set, add, remove } = usePresenceStore(state => ({
     set: state.set,
     add: state.add,
@@ -27,7 +27,7 @@ export const usePresenceChannel = (userId: string | null) => {
   }, [remove]);
 
   useEffect(() => {
-    if (!userId) {
+    if (!userId || !profileComplete) {
       return;
     }
     if (!channelRef.current) {
@@ -58,5 +58,5 @@ export const usePresenceChannel = (userId: string | null) => {
         channelRef.current.unbind('pusher:member_removed', handleRemoveMember);
       }
     }
-  }, [handleAddMember, handleRemoveMember, handleSetMembers, userId]);
+  }, [handleAddMember, handleRemoveMember, handleSetMembers, userId, profileComplete]);
 }

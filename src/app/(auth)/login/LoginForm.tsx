@@ -12,6 +12,7 @@ import {
 } from "@/lib/schemas/LoginSchema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import SocialLogin from "./SocialLogin";
 
 export default function LoginForm() {
   const {
@@ -78,6 +79,7 @@ export default function LoginForm() {
             >
               Login
             </Button>
+            <SocialLogin />
             <div className="flex justify-center hover:underline text-sm">
               <Link href="/forgot-password">
                 Forgot password?

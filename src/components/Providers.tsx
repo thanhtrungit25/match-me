@@ -14,9 +14,11 @@ import { useNotificationChannel } from "@/hooks/useNotificationChannel";
 export function Providers({
   children,
   userId,
+  profileComplete,
 }: {
   children: React.ReactNode;
   userId: string | null;
+  profileComplete: boolean;
 }) {
   const isUnreadCountSet = useRef(false);
   const { updateUnreadCount } = useMessageStore((state) => ({
@@ -40,8 +42,8 @@ export function Providers({
     }
   }, [setUnreadCount, userId]);
 
-  usePresenceChannel(userId);
-  useNotificationChannel(userId);
+  usePresenceChannel(userId, profileComplete);
+  useNotificationChannel(userId, profileComplete);
 
   return (
     <HeroUIProvider>
