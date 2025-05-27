@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useRef } from "react";
+import { SessionProvider } from "next-auth/react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { HeroUIProvider } from "@heroui/react";
@@ -46,9 +47,11 @@ export function Providers({
   useNotificationChannel(userId, profileComplete);
 
   return (
-    <HeroUIProvider>
-      <ToastContainer position="bottom-right" hideProgressBar />
-      {children}
-    </HeroUIProvider>
+    <SessionProvider>
+      <HeroUIProvider>
+        <ToastContainer position="bottom-right" hideProgressBar />
+        {children}
+      </HeroUIProvider>
+    </SessionProvider>
   );
 }

@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 import { Photo } from "@prisma/client";
 import { deleteImage, setMainImage } from "@/app/actions/userActions";
@@ -33,13 +34,18 @@ export default function MemberPhotos({ photos, editing, mainImageUrl }: Props) {
       type: "main",
     });
 
-    await setMainImage(photo);
-    router.refresh();
-    setLoading({
-      isLoading: false,
-      id: "",
-      type: "",
-    });
+    try {
+      await setMainImage(photo);
+      router.refresh();
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setLoading({
+        isLoading: false,
+        id: "",
+        type: "",
+      });
+    }
   };
 
   const onDelete = async (photo: Photo) => {

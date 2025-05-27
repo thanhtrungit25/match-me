@@ -14,8 +14,6 @@ export default async function TopNav(){
   const userInfo =
     session?.user && (await getUserInfoForNav());
 
-  let role = "MEMBERS";
-
   const memberLinks = [
     { href: "/members", label: "Matches" },
     { href: "/lists", label: "Lists" },
@@ -30,7 +28,7 @@ export default async function TopNav(){
   ];
   
   const links =
-    role === "ADMIN"
+    session?.user.role === "ADMIN"
       ? adminLinks
       : memberLinks;
 
