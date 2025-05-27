@@ -18,7 +18,6 @@ export default function SocialLogin() {
   ];
 
   const onClick = (provider: "google" | "github") => {
-    console.log(`Sign in with ${provider}`);
     signIn(provider, {
       callbackUrl: "/members",
     });

@@ -32,8 +32,6 @@ export default function ProfileDetailsForm() {
           errors.gender?.message as string
         }
         onChange={(e) => {
-          console.log("🌈", e.target.value);
-          
           setValue("gender", e.target.value)
         }}
       >

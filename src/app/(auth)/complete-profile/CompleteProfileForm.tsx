@@ -25,7 +25,6 @@ export default function CompleteProfileForm(){
   } = methods;
 
   const onSubmit = async (data: ProfileSchema) => {
-    console.log('Form submitted:', data);
     const result = await completeSocialLoginProfile(data);
 
     if (result.status === 'success') {

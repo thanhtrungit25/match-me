@@ -36,7 +36,6 @@ export default function MemberImage({ photo }: Props) {
 
   const reject = async (photo: Photo) => {
     try {
-      console.log("🌍", photo);
       await rejectPhoto(photo);
       router.refresh();
     } catch (error: any) {

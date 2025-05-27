@@ -56,12 +56,13 @@ export default async function TopNav(){
         </NavbarBrand>
 
         <NavbarContent justify='center'>
-          {links.map((item) => (
-            <NavLink
-              key={item.href}
-              href={item.href}
-              label={item.label}
-            />
+          {session &&
+            links.map((item) => (
+              <NavLink
+                key={item.href}
+                href={item.href}
+                label={item.label}
+              />
           ))}
         </NavbarContent>
 

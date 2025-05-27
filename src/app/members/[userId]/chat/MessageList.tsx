@@ -77,7 +77,7 @@ export default function MessageList({
       channel.unbind("message:new", handleNewMessage);
       channel.unbind("messages:read", handleReadMessages);
     };
-  }, [chatId]);
+  }, [chatId, handleNewMessage, handleReadMessages]);
 
   return (
     <div>

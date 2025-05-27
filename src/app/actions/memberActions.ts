@@ -1,6 +1,5 @@
 "use server";
 
-import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { Member, Photo } from "@prisma/client";
 import { GetMemberParams, PaginatedResponse } from "@/types";
@@ -24,8 +23,6 @@ export async function getMembers({
   pageNumber = "1",
   pageSize = "12",
 }: GetMemberParams): Promise<PaginatedResponse<Member>> {
-  console.log("🔥getMembers -> gender:", gender);
-
   const userId = await getAuthUserId();
 
   const [minDob, maxDob] = getAgeRange(ageRange);

@@ -48,5 +48,5 @@ export const useNotificationChannel = (userId: string | null, profileComplete: b
         channelRef.current = null;
       }
     }
-  }, [userId, profileComplete]);
+  }, [userId, profileComplete, handleNewLike, handleNewLike]);
 }

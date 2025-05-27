@@ -31,7 +31,7 @@ export default function NavLink({
       isActive={pathname === href}
     >
       <span>{label}</span>
-      {href === "/messages" && (
+      {href === "/messages" && unreadCount > 0 && (
         <span className='ml-1'>
           ({unreadCount})
         </span>

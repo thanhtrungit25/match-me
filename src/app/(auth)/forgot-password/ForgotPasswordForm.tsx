@@ -20,7 +20,6 @@ export default function ForgotPasswordForm(){
   } = useForm();
 
   const onSubmit = async (data: FieldValues) => {
-    console.log(data);
     setResult(
       await generateResetPasswordEmail(data.email)
     );

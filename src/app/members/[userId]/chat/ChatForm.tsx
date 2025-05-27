@@ -26,7 +26,6 @@ export default function ChatForm(){
   })
 
   const onSubmit = async (data: MessageSchema) => {
-    console.log(data);
     const result = await createMessage(
       params.userId,
       data

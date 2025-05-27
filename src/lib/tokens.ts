@@ -1,6 +1,5 @@
 import { TokenType } from "@prisma/client";
 import { prisma } from "./prisma";
-import { randomBytes } from "crypto";
 
 export async function getTokenByEmail(email: string) {
   try {
@@ -25,7 +24,7 @@ export async function getTokenByToken(token: string) {
 }
 
 export async function generateToken(email: string, type: TokenType) {
-  const token = randomBytes(48).toString('hex');
+  const token = getToken();
   // expires in 24 hours
   const expires = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
@@ -44,4 +43,12 @@ export async function generateToken(email: string, type: TokenType) {
       type,
     }
   })
+}
+
+function getToken() {
+  const arrayBuffer = new Uint8Array(48);
+  crypto.getRandomValues(arrayBuffer);
+  return Array.from(arrayBuffer, (byte) =>
+    byte.toString(16).padStart(2, "0")
+  ).join("");
 }
