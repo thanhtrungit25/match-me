@@ -1,6 +1,6 @@
 # Match Me App
 
-> App for people to find their match.
+> A full-stack dating application built with Next.js 14, Prisma, NextAuth, Pusher, and Cloudinary.
 
 ## URL
 
@@ -8,13 +8,20 @@
 
 ## Tools
 
-- NextJS
+- NextJS 14
 - Prisma ORM
+- NextAuth (Auth.js)
 - TailwindCSS
 - NextUI
 - NextAuth
 - TypeScript
-- React
+- Pusher  
+- Cloudinary  
+- Vercel  
+- PostgreSQL  
+- React Hook Form  
+- Zod Validation  
+- Zustand
 
 ## Common use commands
 
@@ -34,3 +41,16 @@ npx prisma migrate reset --skip-seed
 npx prisma db seed
 # This command runs your seed script, which adds initial data to your database after setting it up.
 ```
+
+## Installation
+
+1. Clone the repo
+2. Install packages `npm install`
+3. Set up environment variables in .env file
+4. Set up Prisma database
+```bash
+npx prisma generate
+npx prisma migrate dev
+npx prisma db seed
+```
+5. Run the development server `npm run dev`
